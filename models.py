@@ -4,32 +4,37 @@ from django.db import models
 
 
 class Info(models.Model):
-    school_list = (
-        (1, '서강대학교'),
-        (2, '연세대학교'),
-        (3, '가천대학교'),
-        (4, '이화여자대학교'),
-        (5, '울산대학교'),
-        (6, '인천대학교'),
-        (7, '서울예술대학교'),
-        (8, '가톨릭대학교'),
-        (9, '한신대학교'),
-        (10, '국민대학교'),
-        (11, '서울과학기술대학교'),
-        (12, '계원예술대학교'),
-        (13, '서울대학교'),
-        (14, '홍익대학교'),
-        (15, '숭실대학교'),
-        (16, '순천향대학교'),
-        (17, '동덕여자대학교'),
-    )
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     birthday = models.DateField()
     tel_prefix = models.CharField(max_length=3)
     tel_space1 = models.CharField(max_length=4)
     tel_space2 = models.CharField(max_length=4)
-    school = models.PositiveIntegerField(choices=school_list)
+    school = models.ForeignKey('directors.School', on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
+
+
+class School(models.Model):
+    name = models.CharField(max_length=15)
+
+
+class Position(models.Model):
+    name = models.CharField(max_length=15)
+    group = models.ForeignKey('auth.Group', on_delete=models.CASCADE)
+
+
+class Season(models.Model):
+    quarter_list = (
+        (1, '상반기'),
+        (2, '하반기'),
+    )
+    year = models.DateField()
+    quarter = models.PositiveIntegerField(choices=quarter_list)
+
+
+class History(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    position = models.ForeignKey('directors.History', on_delete=models.CASCADE)
+    season = models.ForeignKey('directors.Season', on_delete=models.CASCADE)
