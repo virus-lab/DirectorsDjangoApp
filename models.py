@@ -25,7 +25,9 @@ class Info(models.Model):
     )
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     birthday = models.DateField()
-    tel = models.CharField(max_length=11)
+    tel_prefix = models.CharField(max_length=3)
+    tel_space1 = models.CharField(max_length=4)
+    tel_space2 = models.CharField(max_length=4)
     school = models.PositiveIntegerField(choices=school_list)
     active = models.BooleanField(default=False)
 
